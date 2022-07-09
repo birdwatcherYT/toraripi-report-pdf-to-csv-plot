@@ -6,6 +6,7 @@ import japanize_matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 
+UNITS = {"円": 1, "千円": 1000, "万円": 10000}
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -15,7 +16,11 @@ if __name__ == "__main__":
     parser.add_argument("--save", action="store_true", help="保存するかどうか")
     parser.add_argument("--width", default=2, type=int, help="棒グラフの幅")
     parser.add_argument("--base", default=0, type=int, help="データに含まれない初期資金")
+    parser.add_argument("--ymin", default=None, type=int, help="資産推移の最小値")
+    parser.add_argument("--unit", default="万円", type=str, help="万円/千円/円")
     args = parser.parse_args()
+
+    unit_value = UNITS[args.unit]
 
     if args.file.endswith(".xlsx"):
         df = pd.read_excel(args.file)
@@ -29,14 +34,14 @@ if __name__ == "__main__":
 
     df["日付"] = pd.to_datetime(df["日付"])
 
-    plt.clf()
+    plt.figure(figsize=(8, 5))
     plt.bar(df["日付"], df["確定損益"], label="確定損益", color="red", width=args.width)
     plt.plot(df["日付"], df["評価損益"], label="評価損益", color="blue")
     plt.grid()
     plt.legend()
     plt.title("損益推移")
     plt.gca().get_yaxis().set_major_formatter(
-        ticker.FuncFormatter(lambda v, p: f"{v:,.0f}")
+        ticker.FuncFormatter(lambda v, p: f"{v/unit_value:,.0f}{args.unit}")
     )
 
     if args.save:
@@ -47,7 +52,7 @@ if __name__ == "__main__":
     df["年月"] = df["日付"].dt.strftime("%Y-%m")
     data_month = df.groupby(["年月"])[["総合計", "入出金"]].sum()
 
-    plt.clf()
+    plt.figure(figsize=(8, 5))
     plt.bar(
         data_month.index,
         data_month["総合計"] - data_month["入出金"],
@@ -58,7 +63,7 @@ if __name__ == "__main__":
     plt.legend()
     plt.title("毎月の確定利益")
     plt.gca().get_yaxis().set_major_formatter(
-        ticker.FuncFormatter(lambda v, p: f"{v:,.0f}")
+        ticker.FuncFormatter(lambda v, p: f"{v/unit_value:,.0f}{args.unit}")
     )
     plt.xticks(rotation=30)
 
@@ -67,7 +72,7 @@ if __name__ == "__main__":
     else:
         plt.show()
 
-    plt.clf()
+    plt.figure(figsize=(8, 5))
     plt.plot(df["日付"], df["預託証拠金"], "b", label="預託証拠金")
     plt.plot(df["日付"], df["有効証拠金"], "r--", label="有効証拠金")
     plt.plot(df["日付"], df["累計入出金"], "g:", label="累計入出金")
@@ -75,8 +80,9 @@ if __name__ == "__main__":
     plt.legend()
     plt.title("資産推移")
     plt.gca().get_yaxis().set_major_formatter(
-        ticker.FuncFormatter(lambda v, p: f"{v:,.0f}")
+        ticker.FuncFormatter(lambda v, p: f"{v/unit_value:,.0f}{args.unit}")
     )
+    plt.ylim([args.ymin, None])
 
     if args.save:
         plt.savefig("fx_total.png")
