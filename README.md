@@ -26,3 +26,15 @@ Requirements:
 - pip install japanize_matplotlib
 - pip install matplotlib
 - pip install pandas
+
+
+## 成立履歴のCSVをプロットする
+
+```bash
+python fx_currency_plot.py --csvs 成立履歴.csv
+```
+
+Requirements:
+- pip install japanize_matplotlib
+- pip install matplotlib
+- pip install pandas
