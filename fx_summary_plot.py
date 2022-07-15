@@ -1,4 +1,4 @@
-# python fx_plot.py --save
+# python fx_summary_plot.py --save
 
 import argparse
 import pandas as pd
@@ -11,7 +11,7 @@ UNITS = {"円": 1, "千円": 1000, "万円": 10000}
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--file", default="fx_pdfs.csv", help="fx.xlsx / fx_pdfs.csv", type=str
+        "--file", default="fx_summary.csv", help="fx_summary.csv", type=str
     )
     parser.add_argument("--save", action="store_true", help="保存するかどうか")
     parser.add_argument("--width", default=2, type=int, help="棒グラフの幅")
@@ -22,10 +22,7 @@ if __name__ == "__main__":
 
     unit_value = UNITS[args.unit]
 
-    if args.file.endswith(".xlsx"):
-        df = pd.read_excel(args.file)
-    else:
-        df = pd.read_csv(args.file, encoding="shift_jis")
+    df = pd.read_csv(args.file, encoding="shift_jis")
 
     if "累計入出金" not in df.columns:
         df["累計入出金"] = df["入出金"].cumsum() + args.base

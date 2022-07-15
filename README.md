@@ -19,7 +19,8 @@ Requirements:
 ## 出力したcsvをプロットする
 
 ```bash
-python fx_plot.py --save
+python fx_summary_plot.py --save
+python fx_currency_plot.py --save
 ```
 
 Requirements:
@@ -31,7 +32,7 @@ Requirements:
 ## 成立履歴のCSVをプロットする
 
 ```bash
-python fx_currency_plot.py --csvs 成立履歴.csv
+python fx_csv_plot.py --csvs 成立履歴.csv
 ```
 
 Requirements:
