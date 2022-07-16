@@ -125,6 +125,7 @@ if __name__ == "__main__":
     summary_df = summary_df.sort_values("日付")
     currency_df = pd.DataFrame([c for r, c in records])
     currency_df = currency_df.sort_values("日付")
+    currency_df = currency_df[sorted(currency_df.columns)]
 
     order = [
         "日付",
