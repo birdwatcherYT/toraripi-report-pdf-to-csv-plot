@@ -41,6 +41,7 @@ if __name__ == "__main__":
     plt.gca().get_yaxis().set_major_formatter(
         ticker.FuncFormatter(lambda v, p: f"{v/unit_value:,.0f}{args.unit}")
     )
+    plt.xticks(rotation=30)
 
     if args.save:
         plt.savefig("fx_profit.png")
@@ -84,6 +85,7 @@ if __name__ == "__main__":
         ticker.FuncFormatter(lambda v, p: f"{v/unit_value:,.0f}{args.unit}")
     )
     plt.ylim([args.ymin, None])
+    plt.xticks(rotation=30)
 
     if args.save:
         plt.savefig("fx_total.png")
