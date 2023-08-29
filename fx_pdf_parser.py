@@ -96,6 +96,7 @@ def pdf_to_record(pdf: str) -> Tuple[dict, dict]:
                     inout_values.append(num)
                 if len(inout_values) >= len(inout_columns):
                     mode = Mode.NONE
+    doc.close()
 
     if len(inout_values) == 0:
         inout_values = [0] * len(inout_columns)
